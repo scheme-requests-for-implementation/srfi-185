@@ -37,7 +37,7 @@ John Cowan (editor and shepherd)
 <h1>Abstract</h1>
 <p>
 Scheme specifies mutable fixed-size strings.
-<a href="http://srfi.schemers.org/srfi-118/srfi-118.html">SRFI 118</a>
+<a href="https://srfi.schemers.org/srfi-118/srfi-118.html">SRFI 118</a>
 adds two procedures <code>string-append!</code> and
 <code>string-replace!</code> which allow the size of the string to change.
 This SRFI provides two linear-update versions of these procedures:
@@ -48,7 +48,7 @@ new string instead.
 <p>
 Historically Scheme has only supported fixed-size strings.
 Schemes that support SRFI 118 or
-<a href="http://srfi.schemers.org/srfi-140/srfi-140.html">SRFI 140</a>
+<a href="https://srfi.schemers.org/srfi-140/srfi-140.html">SRFI 140</a>
 provide fixed-size immutable strings and variable-size
 mutable strings, as the usefulness of standard Scheme's fixed-size mutable strings is
 extremely minimal: The main use is for a buffer to which one incrementally
@@ -160,7 +160,7 @@ When <var>value</var> is a string then
 <code>(string-linear-replace! <var>dst</var> (string-length <var>dst</var>) (string-length <var>dst</var>) <var>value</var>)</code>.
 <p>
 <em>Note:</em>
-<a href="http://srfi.schemers.org/srfi-13/srfi-13.html">SRFI 13</a>
+<a href="https://srfi.schemers.org/srfi-13/srfi-13.html">SRFI 13</a>
 and its successors have
 a non-destructive version, <code>string-replace</code>, which
 takes the arguments in the following order:
@@ -179,9 +179,9 @@ implementations.
 It should not be
 used on systems that provide native variable-size strings.
 It depends on having
-<a href="http://srfi.schemers.org/srfi-13/srfi-13.html">SRFI 13</a>,
-<a href="http://srfi.schemers.org/srfi-130/srfi-130.html">SRFI 130</a>,
-or <a href="http://srfi.schemers.org/srfi-152/srfi-152.html">SRFI 152</a>.
+<a href="https://srfi.schemers.org/srfi-13/srfi-13.html">SRFI 13</a>,
+<a href="https://srfi.schemers.org/srfi-130/srfi-130.html">SRFI 130</a>,
+or <a href="https://srfi.schemers.org/srfi-152/srfi-152.html">SRFI 152</a>.
 Alternatively, implementers can copy the definition of <code>string-replace</code>
 out of any of the sample implementations of those SRFIs.
 </p>
@@ -198,8 +198,8 @@ out of any of the sample implementations of those SRFIs.
      (string-replace dst src dst-start dst-end src-start src-end))))
 </pre>
 
-<p>If <a href="http://srfi.schemers.org/srfi-118/srfi-118.html">SRFI 118</a>
-or <a href="http://srfi.schemers.org/srfi-140/srfi-140.html">SRFI 140</a> is available,
+<p>If <a href="https://srfi.schemers.org/srfi-118/srfi-118.html">SRFI 118</a>
+or <a href="https://srfi.schemers.org/srfi-140/srfi-140.html">SRFI 140</a> is available,
 the implementation is even more trivial:
 </p>
 
@@ -217,7 +217,7 @@ Whenever the character buffer is full, it needs to be replaced with
 a bigger buffer.  If the size of the new buffer is a
 fixed multiple of the size of the old buffer then
  <code>string-linear-append!</code> has amortized constant execution time.
-(The multiple 1.5 <a href="http://stackoverflow.com/questions/1100311/what-is-the-ideal-growth-rate-for-a-dynamically-allocated-array">seems a good choice</a>.)
+(The multiple 1.5 <a href="https://stackoverflow.com/questions/1100311/what-is-the-ideal-growth-rate-for-a-dynamically-allocated-array">seems a good choice</a>.)
 </p><p>
 If you have cheap Smalltalk-style <code>becomes:</code> (which is admittedly
 unlikely these days) then you can use that when you need to grow a string
