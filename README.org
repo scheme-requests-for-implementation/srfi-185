@@ -1,6 +1,6 @@
 * SRFI 185: Linear adjustable-size strings
 
-** by John Cowan (editor and shepherd), Per Bothner (original author)
+** by John Cowan
 
 This repository hosts [[https://srfi.schemers.org/srfi-185/][SRFI 185]]: Linear adjustable-size strings, a [[https://srfi.schemers.org/][Scheme Request for Implementation]].
 
