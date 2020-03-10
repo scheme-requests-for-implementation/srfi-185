@@ -158,7 +158,10 @@ The two macros are equivalent to the procedures, except that the
 first argument must be a <i>place</i>.  A place is either a variable
 or a procedure application that is defined by
 <code>identifier-syntax</code> or SRFI 17
-so that it can appear as the first argument of <code>set!</code>.
+so that it can appear as the first argument of <code>set!</code>.  An
+implementation of these macros is free to evaluate the <i>place</i>
+either once or twice, so it is an error for the place expression to
+have either side-effects or non-trivial computation.
 
 </p><pre>(<b>string-append!</b> <var>place</var> <var>string</var> ...)
 </pre>
