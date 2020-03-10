@@ -36,6 +36,7 @@ Linear adjustable-size strings
   <li>Received: 2020-02-23</li>
   <li>60-day deadline: 2020-04-24</li>
   <li>Draft #1 published: 2020-02-24</li>
+  <li>Draft #2 published: 2020-03-09</li>
 </ul>
 
 <h1>Abstract</h1>
@@ -67,12 +68,21 @@ This SRFI provides a useful compromise that takes advantage of
 implementation-specific variable-size strings where they exist, and simulates
 them where they do not.  Note that a native implementation may well
 copy the underlying characters, and therefore is <i>not</i> necessarily
-more efficient.
+more efficient.</p>
 
-</p><h1>Specification</h1>
+<p>The procedures and the macros of this SRFI together provide an
+approximation of the two SRFI 118 procedures.  Direct calls to
+<code>string-append!</code> and <code>string-replace!</code> are
+compatible between the two SRFIs provided that the first argument is
+a valid place (see below).  But calls made using <code>apply</code>,
+or where the first argument is not a place, are incompatible.  In
+those cases, it is necessary to use the two linear procedures while
+being sure to appropriately capture the result.</p> 
+
+<h1>Specification</h1>
 <h2>Procedures</h2>
 <p>
-This SRFI also provides two new convenience macros.
+This SRFI provides two new procedures.  The most frequently used is likely to be
 <code>string-append-linear!</code>, while <code>string-replace-linear!</code>
 handles the general case of replacement of a substring
 with another string of possibly different size.</p>
@@ -143,11 +153,15 @@ implementations.
 </blockquote>
 <h2>Macros</h2>
 <p>
+This SRFI also provides two new convenience macros.
 The two macros are equivalent to the procedures, except that the
 first argument must be a <i>place</i>.  A place is either a variable
 or a procedure application that is defined by
 <code>identifier-syntax</code> or SRFI 17
-so that it can appear as the first argument of <code>set!</code>.
+so that it can appear as the first argument of <code>set!</code>.  An
+implementation of these macros is free to evaluate the <i>place</i>
+either once or twice, so it is an error for the place expression to
+have either side-effects or non-trivial computation.
 
 </p><pre>(<b>string-append!</b> <var>place</var> <var>string</var> ...)
 </pre>
