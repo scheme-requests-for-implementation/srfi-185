@@ -168,19 +168,15 @@ have either side-effects or non-trivial computation.
 <blockquote>
 <p>
 This macro sets <i>place</i> to the result of invoking
-<code>(string-append-linear <i>place</i> <i>string</i> ...)</code>.
+<code>(string-append-linear! <i>place</i> <i>string</i> ...)</code>.
 It returns an unspecified value.
 </p><p>
 </blockquote>
 <pre>(<b>string-replace!</b> <var>dst-place</var> <var>dst-start</var> <var>dst-end</var> <var>src</var> [<var>src-start</var> [<var>src-end</var>]])
 </pre>
 <blockquote>
-This macro sets <var>dst-place</var> to
-a string which has the same characters as <var>dst-place</var>,
-except that the characters between
-<var>dst-start</var> and <var>dst-end</var> have been replaced
-with the characters of the string
-<var>src</var> between <var>src-start</var> and <var>src-end</var>.
+This macro sets <var>dst-place</var> to the result of applying
+<code>string-replace-linear!</code> to its arguments.
 The result is an unspecified value.
 </p>
 </blockquote>
