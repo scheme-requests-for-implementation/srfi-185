@@ -18,7 +18,7 @@
 <body>
 <div class="title">
 <h1>Title</h1>
-Linear adjustable-size strings
+Linear adjustable-length strings
 </div>
 
 <H1>Author</H1>
@@ -41,31 +41,31 @@ Linear adjustable-size strings
 
 <h1>Abstract</h1>
 <p>
-Scheme specifies mutable fixed-size strings.
+Scheme specifies mutable fixed-length strings.
 <a href="https://srfi.schemers.org/srfi-118/srfi-118.html">SRFI 118</a>
 adds two procedures <code>string-append!</code> and
-<code>string-replace!</code> which allow the size of the string to change.
+<code>string-replace!</code> which allow the length of the string to change.
 This SRFI provides two linear-update versions of these procedures:
-that is, the implementation may change the string size or return a
+that is, the implementation may change the string length or return a
 new string instead.
 In addition, two convenience macros are provided that make the
 procedures somewhat easier to use.
  
 </p><h1>Rationale</h1>
 <p>
-Historically Scheme has only supported fixed-size strings.
+Historically Scheme has only supported fixed-length strings.
 Schemes that support SRFI 118 or
 <a href="https://srfi.schemers.org/srfi-140/srfi-140.html">SRFI 140</a>
-provide fixed-size immutable strings and variable-size
-mutable strings, as the usefulness of standard Scheme's fixed-size mutable strings is
+provide fixed-length immutable strings and variable-length
+mutable strings, as the usefulness of standard Scheme's fixed-length mutable strings is
 limited: the main use is for a buffer to which one incrementally
 adds more data.  So why not fold that functionality into the string API?
 That is, why can't you add just data to the end of a string?
 </p><p>
 The difficulty is that only a few Scheme implementations provide such
-strings, and therefore variable-size strings are inherently not portable.
+strings, and therefore variable-length strings are inherently not portable.
 This SRFI provides a useful compromise that takes advantage of
-implementation-specific variable-size strings where they exist, and simulates
+implementation-specific variable-length strings where they exist, and simulates
 them where they do not.  Note that a native implementation may well
 copy the underlying characters, and therefore is <i>not</i> necessarily
 more efficient.</p>
@@ -76,16 +76,51 @@ approximation of the two SRFI 118 procedures.  Direct calls to
 compatible between the two SRFIs provided that the first argument is
 a valid place (see below).  But calls made using <code>apply</code>,
 or where the first argument is not a place, are incompatible.  In
-those cases, it is necessary to use the two linear procedures while
+those cases, it is necessary to use the two procedures while
 being sure to appropriately capture the result.</p> 
 
+<p>In this SRFI the terms <i>linear</i> and <i>linear-update</i>
+are meant in the sense of
+<a href="https://srfi.schemers.org/srfi-1/srfi-1.html#LinearUpdateProcedures">
+SRFI 1</a>.
+That is, they are allowed &mdash; but not required &mdash; to side-effect
+their first argument in order to construct their results.  They use the
+same <code>!</code> suffix as purely mutational procedures, because
+they must be treated by the user as mutational whether they actually
+mutate anything or not.</p>
+
 <h1>Specification</h1>
+
+<h2>Storage model</h2>
+
+<p>Note: This section does not apply to implementations that do not support
+variable-length strings.</p>
+
+<p>In terms of the R[567]RS storage model for strings
+as described in Section 3.4 of both R5RS and R7RS,
+strings are modeled not as ordinary fixed-length strings, but as a mutable box
+(see <a href="http://srfi.schemers.org/srfi-111/srfi-111.html">SRFI
+111</a> for a discussion of boxes) that contains a fixed-length immutable string.
+Thus a variable-length string, rather than having one location per
+character as a fixed-length string does, or no locations at all as an
+fixed-length immutable string (for example, a string literal) does, has
+just a single location.  This does <i>not</i> mean that this is the
+only correct way to implement variable-length strings, but it clarifies
+reasoning about them.</p>
+
+<p>In particular, a fixed-length string whose length is zero is in
+effect immutable, as it contains no locations.  But a variable-length
+string whose current length is zero is modeled as a box containing
+an empty immutable string rather than simply a fixed-length string.
+Thus it is possible to extend it with additional characters
+by changing the location in the box.</p>
+
 <h2>Procedures</h2>
 <p>
 This SRFI provides two new procedures.  The most frequently used is likely to be
 <code>string-append-linear!</code>, while <code>string-replace-linear!</code>
 handles the general case of replacement of a substring
-with another string of possibly different size.</p>
+with another string of possibly different length.</p>
 
 </p><pre>(<b>string-append-linear!</b> <var>string1</var> <var>string2</var> ...)
 </pre>
@@ -123,7 +158,7 @@ be unchanged; it might be altered.
 </p><p>
 The number of characters from <var>src</var> may be different than the
 number replaced in <var>dst</var>, so the result may be larger or smaller
-than the previous size of <var>dst</var>.
+than the previous length of <var>dst</var>.
 The special case where <var>dst-start</var> is equal to <var>dst-end</var>
 corresponds to insertion; the case where <var>src-start</var> is equal
 to <var>src-end</var> corresponds to deletion.
@@ -154,7 +189,7 @@ implementations.
 <h2>Macros</h2>
 <p>
 This SRFI also provides two new convenience macros.
-The two macros are equivalent to the procedures, except that the
+The two macros are more or less equivalent to the procedures, except that the
 first argument must be a <i>place</i>.  A place is either a variable
 or a procedure application that is defined by
 <code>identifier-syntax</code> or SRFI 17
@@ -184,7 +219,7 @@ The result is an unspecified value.
 <p>
 The following example shows how to process a string using
 <code>string-for-each</code> and incrementally <q>building</q> a result string
-using <code>string-append-linear!</code>:</p>
+using the <code>string-append!</code> macro:</p>
 <pre>(define (translate-space-to-newline str)
   (let ((result (make-string 0)))
     (string-for-each
@@ -226,7 +261,7 @@ or <code>string-replace!</code>.
 <h1>Implementation</h1>
 <p>Here is a portable implementation that always returns a new string.
 It should not be
-used on systems that provide native variable-size strings.
+used on systems that provide native variable-length strings.
 It depends on having
 <a href="https://srfi.schemers.org/srfi-13/srfi-13.html">SRFI 13</a>,
 <a href="https://srfi.schemers.org/srfi-130/srfi-130.html">SRFI 130</a>,
@@ -277,14 +312,14 @@ A native implementation is easy, assuming there is some indirection
 between the string object header and the actual stored characters.
 (This is not true in all implementations, Chicken for example.)
 Whenever the character buffer is full, it needs to be replaced with
-a bigger buffer.  If the size of the new buffer is a
-fixed multiple of the size of the old buffer then
+a bigger buffer.  If the length of the new buffer is a
+fixed multiple of the length of the old buffer then
  <code>string-append-linear!</code> has amortized constant execution time.
 (The multiple 1.5 <a href="https://stackoverflow.com/questions/1100311/what-is-the-ideal-growth-rate-for-a-dynamically-allocated-array">seems a good choice</a>.)
 </p><p>
 If you have cheap Smalltalk-style <code>becomes:</code> (which is admittedly
 unlikely these days) then you can use that when you need to grow a string
-beyond its allocated size.
+beyond its allocated length.
 Alternatively, a garbage collection can be invoked, which is
 what Chicken does when it must expand the bytes used to represent a UTF-8
 string as a result of replacing a character with another character
