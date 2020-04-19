@@ -92,7 +92,6 @@ In other words, any references to <var>dst</var>
 other than the result of these procedures
 must be treated as "dead" and never referred to again.
 This must be so, since you can't rely on the value passed to a
-:d
 linear-update procedure after that procedure has been called. It might
 
 <h1>Specification</h1>
@@ -136,9 +135,6 @@ This procedure returns a string which extends <var>dst</var> by
 appending each additional <var>string-or-char</var> (in order) to the end of <var>dst</var>.
 A character argument and a string argument of length 1 are treated exactly the same way.
 The result can either be <var>dst</var> itself or a newly allocated string.
-In either case, any references to <var>dst</var>
-other than the result of this procedure
-must be treated as "dead" and never referred to again.
 </p><p>
 <p>There is no requirement that this procedure execute in constant time,
 even amortised (i.e. average) constant time.
@@ -153,9 +149,6 @@ except that the characters between
 with the characters of the string
 <var>src</var> between <var>src-start</var> and <var>src-end</var>.
 The result can either be <var>dst</var> itself or a newly allocated string.
-In either case, any references to <var>dst</var>
-other than the result of this procedure
-must be treated as "dead" and never referred to again.
 </p><p>
 The number of characters from <var>src</var> may be different than the
 number replaced in <var>dst</var>, so the result may be larger or smaller
