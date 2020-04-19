@@ -80,14 +80,20 @@ those cases, it is necessary to use the two procedures while
 being sure to appropriately capture the result.</p> 
 
 <p>In this SRFI the terms <i>linear</i> and <i>linear-update</i>
-are meant in the sense of
+are used in the sense of
 <a href="https://srfi.schemers.org/srfi-1/srfi-1.html#LinearUpdateProcedures">
 SRFI 1</a>.
 That is, they are allowed &mdash; but not required &mdash; to side-effect
 their first argument in order to construct their results.  They use the
 same <code>!</code> suffix as purely mutational procedures, because
 they must be treated by the user as mutational whether they actually
-mutate anything or not.</p>
+mutate anything or not.
+In other words, any references to <var>dst</var>
+other than the result of these procedures
+must be treated as "dead" and never referred to again.
+This must be so, since you can't rely on the value passed to a
+:d
+linear-update procedure after that procedure has been called. It might
 
 <h1>Specification</h1>
 
@@ -122,19 +128,17 @@ This SRFI provides two new procedures.  The most frequently used is likely to be
 handles the general case of replacement of a substring
 with another string of possibly different length.</p>
 
-</p><pre>(<b>string-append-linear!</b> <var>string1</var> <var>string2</var> ...)
+</p><pre>(<b>string-append-linear!</b> <var>dst</var> <var>string-or-char</var> ...)
 </pre>
 <blockquote>
 <p>
-This procedure returns a string which extends <var>string1</var> by
-appending each additional <var>string</var> (in order) to the end of <var>string</var>.
-The result can either be <var>string1</var> itself or a newly allocated string.
-In either case, any references to <var>string1</var>
+This procedure returns a string which extends <var>dst</var> by
+appending each additional <var>string-or-char</var> (in order) to the end of <var>dst</var>.
+A character argument and a string argument of length 1 are treated exactly the same way.
+The result can either be <var>dst</var> itself or a newly allocated string.
+In either case, any references to <var>dst</var>
 other than the result of this procedure
 must be treated as "dead" and never referred to again.
-This must be so, since you can't rely on the modifiable string passed to a
-linear-update procedure after that procedure has been called. It might
-be unchanged; it might be altered.
 </p><p>
 <p>There is no requirement that this procedure execute in constant time,
 even amortised (i.e. average) constant time.
@@ -152,9 +156,6 @@ The result can either be <var>dst</var> itself or a newly allocated string.
 In either case, any references to <var>dst</var>
 other than the result of this procedure
 must be treated as "dead" and never referred to again.
-This must be so, since you can't rely on the value passed to a
-linear-update procedure after that procedure has been called. It might
-be unchanged; it might be altered.
 </p><p>
 The number of characters from <var>src</var> may be different than the
 number replaced in <var>dst</var>, so the result may be larger or smaller
@@ -228,7 +229,7 @@ using the <code>string-append!</code> macro:</p>
               (string-append! result #\newline))
              ((char=? ch #\return)) ; Ignore
              (else
-              (string-append! result (string ch)))))
+              (string-append! result ch))))
      str)
     result))
 </pre>
@@ -270,7 +271,9 @@ Alternatively, implementers can copy the definition of <code>string-replace</cod
 out of any of the sample implementations of those SRFIs.
 </p>
 <pre>
-(define string-append-linear! string-append)
+(define (string-append-linear! . args)
+  (apply string-append
+    (map (lambda (x) (if (char? x) (string x) x)) args)))
   
 (define string-replace-linear!
   (case-lambda
@@ -299,12 +302,12 @@ the implementation is even more trivial:
 <pre>
 (define-syntax string-append!
   (syntax-rules ()
-    ((place . args)
+    ((_ place . args)
      (set! place (string-append-linear! place . args)))))
 
 (define-syntax string-replace!
   (syntax-rules ()
-    ((place . args)
+    ((_ place . args)
      (set! place (string-replace-linear! place . args)))))
 </pre>
 <p>
