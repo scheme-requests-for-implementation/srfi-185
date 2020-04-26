@@ -6,7 +6,7 @@
 
 This repository hosts [[https://srfi.schemers.org/srfi-185/][SRFI 185]]: Linear adjustable-length strings, a [[https://srfi.schemers.org/][Scheme Request for Implementation]].
 
-This SRFI is in /draft/ status.
+This SRFI is in /final/ status.
 
 See also [[https://srfi.schemers.org/srfi-13/][SRFI 13: String Libraries]], [[https://srfi.schemers.org/srfi-118/][SRFI 118: Simple adjustable-size strings]], [[https://srfi.schemers.org/srfi-130/][SRFI 130: Cursor-based string library]], [[https://srfi.schemers.org/srfi-140/][SRFI 140: Immutable Strings]], and [[https://srfi.schemers.org/srfi-152/][SRFI 152: String Library (reduced)]].
 
