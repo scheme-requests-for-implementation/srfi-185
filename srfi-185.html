@@ -2,8 +2,8 @@
 <html lang="en">
   <head>
     <title>SRFI 185: Linear adjustable-length strings</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="/srfi.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/srfi.css" type="text/css">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link href="/favicon.png" rel="icon" sizes="192x192" type="image/png">
     <style type="text/css">
@@ -129,7 +129,7 @@ This SRFI provides two new procedures.  The most frequently used is likely to be
 handles the general case of replacement of a substring
 with another string of possibly different length.</p>
 
-</p><pre>(<b>string-append-linear!</b> <var>dst</var> <var>string-or-char</var> ...)
+<pre>(<b>string-append-linear!</b> <var>dst</var> <var>string-or-char</var> ...)
 </pre>
 <blockquote>
 <p>
@@ -151,7 +151,7 @@ except that the characters between
 with the characters of the string
 <var>src</var> between <var>src-start</var> and <var>src-end</var>.
 The result can either be <var>dst</var> itself or a newly allocated string.
-</p><p>
+<p>
 The number of characters from <var>src</var> may be different than the
 number replaced in <var>dst</var>, so the result may be larger or smaller
 than the previous length of <var>dst</var>.
@@ -209,7 +209,6 @@ It returns an unspecified value.
 This macro sets <var>dst-place</var> to the result of applying
 <code>string-replace-linear!</code> to its arguments.
 The result is an unspecified value.
-</p>
 </blockquote>
 <h2>Example</h2>
 <p>
