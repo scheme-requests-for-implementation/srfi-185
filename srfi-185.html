@@ -194,12 +194,12 @@ implementation of these macros is free to evaluate the <i>place</i>
 either once or twice, so it is an error for the place expression to
 have either side-effects or non-trivial computation.
 
-</p><pre>(<b>string-append!</b> <var>place</var> <var>string</var> ...)
+</p><pre>(<b>string-append!</b> <var>place</var> <var>string-or-char</var> ...)
 </pre>
 <blockquote>
 <p>
 This macro sets <i>place</i> to the result of invoking
-<code>(string-append-linear! <i>place</i> <i>string</i> ...)</code>.
+<code>(string-append-linear! <i>place</i> <i>string-or-char</i> ...)</code>.
 It returns an unspecified value.
 </p><p>
 </blockquote>
