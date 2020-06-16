@@ -164,7 +164,7 @@ place as if the source is first copied into a temporary string and
 then into the destination. (This can be achieved without allocating
 storage by making sure to copy in the correct direction in such circumstances.)
 <p>
-When <var>value</var> is a string then
+When <var>src</var> is a string then
 <code>(string-append-linear! <var>dst</var> <var>src</var>)</code> is equivalent to
 <code>(string-replace-linear! <var>dst</var> (string-length <var>dst</var>) (string-length <var>dst</var>) <var>src</var>)</code>.
 <p>
